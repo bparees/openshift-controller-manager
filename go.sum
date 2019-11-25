@@ -52,9 +52,11 @@ github.com/bifurcation/mint v0.0.0-20180715133206-93c51c6ce115/go.mod h1:zVt7zX3
 github.com/blang/semver v3.5.0+incompatible h1:CGxCgetQ64DKk7rdZ++Vfnb1+ogGNnB17OJKJXD2Cfs=
 github.com/blang/semver v3.5.0+incompatible/go.mod h1:kRBLl5iJ+tD4TcOOxsy/0fnwebNt5EWlYSAyrTnjyyk=
 github.com/boltdb/bolt v1.3.1/go.mod h1:clJnj/oiGkjum5o1McbSZDSLxVThjynRyGBgiAx27Ps=
+github.com/bparees/api v0.0.0-20191125163621-65f6fda h1:4J8zBpklvGsSuexhoogUNDcjH0xTe4Y50SzI9eP56p8=
 github.com/bparees/api v0.0.0-20191125163621-65f6fda/go.mod h1:Vj80g2M/G9NmFdrmLUFRxBd5d+S0/rjYSjXxf+LDfgg=
 github.com/bparees/api v3.9.1-0.20191028134408-abf28f93703b+incompatible/go.mod h1:Vj80g2M/G9NmFdrmLUFRxBd5d+S0/rjYSjXxf+LDfgg=
 github.com/bparees/client-go v0.0.0-20191022152013-2823239d2298/go.mod h1:M9yGxC0LtWFRdRAs4kUcZumO7KokZVahmvWqEikWU2Y=
+github.com/bparees/client-go v0.0.0-20191125163924-dd349b0 h1:/mVR7FUIhV+oweXMzTQ7UKwy5QTnzW+56W+5TaCCELU=
 github.com/bparees/client-go v0.0.0-20191125163924-dd349b0/go.mod h1:M9yGxC0LtWFRdRAs4kUcZumO7KokZVahmvWqEikWU2Y=
 github.com/caddyserver/caddy v1.0.3/go.mod h1:G+ouvOY32gENkJC+jhgl62TyhvqEsFaDiZ4uw0RzP1E=
 github.com/cenkalti/backoff v2.1.1+incompatible/go.mod h1:90ReRw6GdpyfrHakVjL/QHaoyV4aDUVVkXQJJJ3NXXM=
