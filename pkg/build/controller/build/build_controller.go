@@ -2302,9 +2302,7 @@ func buildDesc(build *buildv1.Build) string {
 // phase with the given reason and message
 func transitionToPhase(phase buildv1.BuildPhase, reason buildv1.StatusReason, message string) *buildUpdate {
 	update := &buildUpdate{}
-	update.setPhase(phase)
-	update.setReason(reason)
-	update.setMessage(message)
+	update.setTransition(phase, reason, message)
 	return update
 }
 

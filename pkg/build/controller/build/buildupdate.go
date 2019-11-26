@@ -29,10 +29,51 @@ type buildUpdate struct {
 	outputRef         *string
 	logSnippet        *string
 	pushSecret        *corev1.LocalObjectReference
+	conditions        []buildv1.BuildCondition
 }
 
 func (u *buildUpdate) setPhase(phase buildv1.BuildPhase) {
 	u.phase = &phase
+}
+
+func (u *buildUpdate) setTransition(phase buildv1.BuildPhase, reason buildv1.StatusReason, message string) {
+	u.phase = &phase
+	u.reason = &reason
+	u.message = &message
+	found := false
+	for i := range u.conditions {
+		if string(phase) == string(u.conditions[i].Type) {
+			// set the condition that matches the new phase to true
+			found = true
+			if u.conditions[i].Status != corev1.ConditionTrue {
+				u.conditions[i].Status = corev1.ConditionTrue
+				u.conditions[i].LastTransitionTime = metav1.Now()
+			}
+			u.conditions[i].LastUpdateTime = metav1.Now()
+			u.conditions[i].Reason = string(reason)
+			u.conditions[i].Message = message
+		} else {
+			// set any conditions that don't match the new phase and are not already false, to false.
+			if u.conditions[i].Status != corev1.ConditionFalse {
+				u.conditions[i].Status = corev1.ConditionFalse
+				u.conditions[i].LastTransitionTime = metav1.Now()
+				u.conditions[i].LastUpdateTime = metav1.Now()
+				u.conditions[i].Reason = ""
+				u.conditions[i].Message = ""
+			}
+		}
+	}
+	if !found {
+		condition := buildv1.BuildCondition{
+			Type:               buildv1.BuildConditionType(phase),
+			Status:             corev1.ConditionTrue,
+			LastUpdateTime:     metav1.Now(),
+			LastTransitionTime: metav1.Now(),
+			Reason:             string(reason),
+			Message:            message,
+		}
+		u.conditions = append(u.conditions, condition)
+	}
 }
 
 func (u *buildUpdate) setReason(reason buildv1.StatusReason) {
@@ -94,12 +135,16 @@ func (u *buildUpdate) isEmpty() bool {
 		u.duration == nil &&
 		u.outputRef == nil &&
 		u.logSnippet == nil &&
-		u.pushSecret == nil
+		u.pushSecret == nil &&
+		len(u.conditions) == 0
 }
 
 func (u *buildUpdate) apply(build *buildv1.Build) {
 	if u.phase != nil {
 		build.Status.Phase = *u.phase
+	}
+	if len(u.conditions) != 0 {
+		build.Status.Conditions = u.conditions
 	}
 	if u.reason != nil {
 		build.Status.Reason = *u.reason
@@ -136,6 +181,9 @@ func (u *buildUpdate) String() string {
 	updates := []string{}
 	if u.phase != nil {
 		updates = append(updates, fmt.Sprintf("phase: %q", *u.phase))
+	}
+	if len(u.conditions) > 0 {
+		updates = append(updates, fmt.Sprintf("conditions: %v", u.conditions))
 	}
 	if u.reason != nil {
 		updates = append(updates, fmt.Sprintf("reason: %q", *u.reason))
